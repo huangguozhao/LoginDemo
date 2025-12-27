@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>仪表板 - Session认证系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .welcome-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .info-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .info-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .info-item {
+            margin-bottom: 0.5rem;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+        .success-message {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Session认证系统</h1>
+        <form th:action="@{/auth/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="logout-btn">退出登录</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div th:if="${message}" class="success-message" th:text="${message}"></div>
+
+        <div class="welcome-card">
+            <h2>欢迎回来，<span th:text="${user.username}">用户名</span>！</h2>
+            <p>您已成功登录到Session-Based认证系统中。</p>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>用户信息</h3>
+                <div class="info-item">
+                    <span class="label">用户名：</span>
+                    <span th:text="${user.username}">用户名</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">邮箱：</span>
+                    <span th:text="${user.email}">邮箱</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">注册时间：</span>
+                    <span th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}">注册时间</span>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>Session信息</h3>
+                <div class="info-item">
+                    <span class="label">Session ID：</span>
+                    <span th:text="${#httpServletRequest.getSession().getId()}">Session ID</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">创建时间：</span>
+                    <span th:text="${#temporals.format(#httpServletRequest.getSession().getCreationTime(), 'yyyy-MM-dd HH:mm:ss')}">创建时间</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">最后访问：</span>
+                    <span th:text="${#temporals.format(#httpServletRequest.getSession().getLastAccessedTime(), 'yyyy-MM-dd HH:mm:ss')}">最后访问</span>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>系统功能</h3>
+                <ul>
+                    <li>✅ 用户注册和登录</li>
+                    <li>✅ Session管理</li>
+                    <li>✅ 自动登录状态检查</li>
+                    <li>✅ 安全退出</li>
+                    <li>✅ H2数据库集成</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

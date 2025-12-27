@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiro控制台 - 登录认证方案演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            margin: 0;
+            padding: 0;
+            color: #2d3748;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .welcome-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .welcome-card h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        .welcome-card p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+        .user-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .user-info h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .info-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .info-item h3 {
+            margin: 0 0 10px 0;
+            color: #4a5568;
+            font-size: 1em;
+        }
+        .info-item p {
+            margin: 5px 0;
+            color: #718096;
+        }
+        .status-success {
+            color: #38a169;
+            font-weight: bold;
+        }
+        .status-error {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        .permissions-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .permissions-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .permission-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+        .permission-item.allowed {
+            border-color: #38a169;
+            background: #f0fff4;
+        }
+        .permission-item.denied {
+            border-color: #e53e3e;
+            background: #fed7d7;
+        }
+        .permission-item h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+        .permission-item .status {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .actions {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .actions h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 15px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .action-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+        .admin-btn {
+            background: #38a169;
+        }
+        .admin-btn:hover {
+            background: #2f855a;
+        }
+        .logout-btn {
+            background: #e53e3e;
+        }
+        .logout-btn:hover {
+            background: #c53030;
+        }
+        .method-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .method-info h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .method-info ul {
+            padding-left: 20px;
+        }
+        .method-info li {
+            margin-bottom: 10px;
+            color: #718096;
+        }
+        .method-info strong {
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛡️ Apache Shiro 控制台</h1>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1>欢迎使用Apache Shiro认证，<span th:text="${username}">用户</span>！</h1>
+            <p>您已成功通过Shiro安全框架完成身份认证和授权</p>
+        </div>
+
+        <div class="user-info">
+            <h2>👤 用户信息</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3>用户名</h3>
+                    <p th:text="${username}">N/A</p>
+                </div>
+                <div class="info-item">
+                    <h3>认证状态</h3>
+                    <p th:class="${authenticated} ? 'status-success' : 'status-error'"
+                       th:text="${authenticated} ? '已认证' : '未认证'">N/A</p>
+                </div>
+                <div class="info-item">
+                    <h3>用户角色</h3>
+                    <p th:text="${hasRoleAdmin} ? '管理员' : '普通用户'">N/A</p>
+                </div>
+                <div class="info-item">
+                    <h3>认证方式</h3>
+                    <p>Apache Shiro</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="permissions-section">
+            <h2>🔐 权限检查</h2>
+            <div class="permissions-grid">
+                <div class="permission-item" th:classappend="${hasRoleUser} ? 'allowed' : 'denied'">
+                    <h4>用户角色</h4>
+                    <div class="status" th:text="${hasRoleUser} ? '✓' : '✗'"></div>
+                </div>
+                <div class="permission-item" th:classappend="${hasRoleAdmin} ? 'allowed' : 'denied'">
+                    <h4>管理员角色</h4>
+                    <div class="status" th:text="${hasRoleAdmin} ? '✓' : '✗'"></div>
+                </div>
+                <div class="permission-item" th:classappend="${hasPermissionRead} ? 'allowed' : 'denied'">
+                    <h4>读取权限</h4>
+                    <div class="status" th:text="${hasPermissionRead} ? '✓' : '✗'"></div>
+                </div>
+                <div class="permission-item" th:classappend="${hasPermissionWrite} ? 'allowed' : 'denied'">
+                    <h4>写入权限</h4>
+                    <div class="status" th:text="${hasPermissionWrite} ? '✓' : '✗'"></div>
+                </div>
+                <div class="permission-item" th:classappend="${hasPermissionManage} ? 'allowed' : 'denied'">
+                    <h4>管理权限</h4>
+                    <div class="status" th:text="${hasPermissionManage} ? '✓' : '✗'"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <h2>🔧 操作面板</h2>
+            <div class="action-buttons">
+                <a href="#" onclick="viewProfile()" class="action-btn">👤 查看个人资料</a>
+                <a th:if="${hasRoleAdmin}" href="/shiro/admin" class="action-btn admin-btn">⚙️ 管理面板</a>
+                <a th:if="${!hasRoleAdmin}" href="#" onclick="accessDenied()" class="action-btn admin-btn" style="background: #a0aec0; cursor: not-allowed;">⚙️ 管理面板 (无权限)</a>
+                <form th:action="@{/shiro/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="action-btn logout-btn" style="border: none; cursor: pointer; width: 100%;">🚪 退出登录</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="method-info">
+            <h2>📚 Apache Shiro 认证说明</h2>
+            <ul>
+                <li><strong>Subject:</strong> 安全操作的主体，代表当前用户</li>
+                <li><strong>SecurityManager:</strong> 安全管理器，协调各种安全组件</li>
+                <li><strong>Realm:</strong> 数据源，负责认证和授权数据的获取</li>
+                <li><strong>优点:</strong> 功能丰富，支持多种数据源，易于扩展</li>
+                <li><strong>特点:</strong> 基于权限的访问控制，支持角色和权限的双重验证</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function viewProfile() {
+            window.location.href = '/shiro/profile';
+        }
+
+        function accessDenied() {
+            alert('您没有管理员权限，无法访问管理面板！');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiro个人资料 - 登录认证方案演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            margin: 0;
+            padding: 0;
+            color: #2d3748;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .profile-card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .detail-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .detail-item h3 {
+            margin: 0 0 10px 0;
+            color: #4a5568;
+            font-size: 1em;
+        }
+        .detail-item p {
+            margin: 5px 0;
+            color: #718096;
+        }
+        .detail-item .value {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .shiro-explanation {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .shiro-explanation h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .shiro-explanation ul {
+            padding-left: 20px;
+        }
+        .shiro-explanation li {
+            margin-bottom: 10px;
+            color: #718096;
+        }
+        .shiro-explanation strong {
+            color: #4a5568;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #5a67d8;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👤 Shiro 个人资料</h1>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <h2>用户信息</h2>
+            <div class="profile-details">
+                <div class="detail-item">
+                    <h3>用户名</h3>
+                    <p><span class="value" th:text="${username}">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>认证状态</h3>
+                    <p><span class="value" th:text="${authenticated} ? '已认证' : '未认证'">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>用户角色</h3>
+                    <p><span class="value" th:text="${roles}">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>用户权限</h3>
+                    <p><span class="value" th:text="${permissions}">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>认证方式</h3>
+                    <p><span class="value">Apache Shiro</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>安全框架</h3>
+                    <p><span class="value">基于Realm的安全管理</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="shiro-explanation">
+            <h2>🛡️ Shiro 安全框架详解</h2>
+            <ul>
+                <li><strong>三大核心组件:</strong> Subject（主体）、SecurityManager（安全管理器）、Realms（数据域）</li>
+                <li><strong>认证流程:</strong> Subject提交认证信息 → SecurityManager调用Realm验证 → 返回认证结果</li>
+                <li><strong>授权机制:</strong> 基于角色的访问控制（RBAC）+ 基于权限的访问控制</li>
+                <li><strong>RememberMe:</strong> 支持"记住我"功能，延长用户会话</li>
+                <li><strong>会话管理:</strong> 内置会话管理，支持分布式会话</li>
+                <li><strong>加密支持:</strong> 提供密码加密、散列等安全工具</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/shiro/dashboard" class="back-btn">← 返回控制台</a>
+        </div>
+    </div>
+</body>
+</html>

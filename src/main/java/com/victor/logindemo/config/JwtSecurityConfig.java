@@ -47,16 +47,16 @@ public class JwtSecurityConfig {
     }
 
     @Bean
-    public UserDetailsService jwtUserDetailsService() {
+    public UserDetailsService jwtUserDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails admin = User.builder()
             .username("admin")
-            .password(passwordEncoder().encode("admin123"))
+            .password(passwordEncoder.encode("admin123"))
             .roles("ADMIN", "USER")
             .build();
 
         UserDetails user = User.builder()
             .username("user")
-            .password(passwordEncoder().encode("user123"))
+            .password(passwordEncoder.encode("user123"))
             .roles("USER")
             .build();
 
@@ -64,17 +64,7 @@ public class JwtSecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public JwtUtil jwtUtil() {
-        return new JwtUtil();
     }
 }

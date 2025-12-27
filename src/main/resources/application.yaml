@@ -25,4 +25,4 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
             jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
 server:
-  port: 8081
+  port: 8082

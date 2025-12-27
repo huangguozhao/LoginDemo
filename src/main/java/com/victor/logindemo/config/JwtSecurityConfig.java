@@ -32,11 +32,11 @@ public class JwtSecurityConfig {
     @Bean
     public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/jwt/**")
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/", "/auth-methods", "/css/**", "/js/**").permitAll()
                 .requestMatchers("/jwt/login", "/jwt/authenticate").permitAll()
                 .requestMatchers("/jwt/**").authenticated()
                 .anyRequest().denyAll()
@@ -66,5 +66,10 @@ public class JwtSecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

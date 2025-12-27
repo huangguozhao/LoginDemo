@@ -88,34 +88,16 @@
         </div>
 
         <div class="auth-grid">
-            <a href="/session/login" class="auth-card">
-                <h3>Session-Based 认证</h3>
-                <p>传统的基于会话的认证方式，使用服务器端会话存储用户状态。</p>
-                <span class="method">Spring Security</span>
-            </a>
-
-            <a href="/oauth2/login" class="auth-card">
-                <h3>OAuth2 / OIDC 认证</h3>
-                <p>现代的开放标准认证协议，支持第三方应用授权。</p>
-                <span class="method">OAuth2 / OpenID Connect</span>
-            </a>
-
-            <a href="/jwt/login" class="auth-card">
+            <a href="/jwt/login" class="auth-card" style="grid-column: span 2;">
                 <h3>JWT Token 认证</h3>
-                <p>无状态的令牌认证，包含用户信息的JSON Web Token。</p>
+                <p>无状态的令牌认证，包含用户信息的JSON Web Token。使用HMAC-SHA256算法签名，支持过期时间验证。</p>
                 <span class="method">JWT (JSON Web Token)</span>
             </a>
 
-            <a href="/shiro/login" class="auth-card">
-                <h3>Apache Shiro 认证</h3>
-                <p>功能强大的安全框架，支持多种认证和授权机制。</p>
-                <span class="method">Apache Shiro</span>
-            </a>
-
             <a href="/auth-methods" class="auth-card">
-                <h3>认证方法对比</h3>
-                <p>查看各种认证方法的优缺点和技术对比。</p>
-                <span class="method">对比分析</span>
+                <h3>JWT认证详解</h3>
+                <p>了解JWT的工作原理、优缺点及使用场景。</p>
+                <span class="method">技术说明</span>
             </a>
         </div>
 

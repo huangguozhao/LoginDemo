@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth2个人资料 - 登录认证方案演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            margin: 0;
+            padding: 0;
+            color: #2d3748;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .profile-card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: block;
+            border: 4px solid #e2e8f0;
+        }
+        .user-name {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+        .user-email {
+            color: #718096;
+            font-size: 1.1em;
+        }
+        .provider-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .detail-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .detail-item h3 {
+            margin: 0 0 10px 0;
+            color: #4a5568;
+            font-size: 1em;
+        }
+        .detail-item p {
+            margin: 5px 0;
+            color: #718096;
+        }
+        .detail-item .value {
+            font-weight: 600;
+            color: #4a5568;
+            font-family: 'Courier New', monospace;
+        }
+        .attributes-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .attributes-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .attributes-json {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #5a67d8;
+            color: white;
+            text-decoration: none;
+        }
+        .oauth-explanation {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .oauth-explanation h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .oauth-explanation ul {
+            padding-left: 20px;
+        }
+        .oauth-explanation li {
+            margin-bottom: 10px;
+            color: #718096;
+        }
+        .oauth-explanation strong {
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👤 OAuth2 个人资料</h1>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <img th:if="${avatarUrl != null}" th:src="${avatarUrl}" alt="Avatar" class="avatar">
+                <img th:if="${picture != null}" th:src="${picture}" alt="Avatar" class="avatar">
+                <div class="user-name" th:text="${name != null ? name : login}">用户名</div>
+                <div class="user-email" th:text="${email != null ? email : '邮箱未公开'}">user@example.com</div>
+                <span class="provider-badge" th:text="'来自 ' + ${provider}"></span>
+            </div>
+
+            <h2>基本信息</h2>
+            <div class="profile-details">
+                <div class="detail-item">
+                    <h3>用户标识</h3>
+                    <p><span class="value" th:text="${id}">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>登录名称</h3>
+                    <p><span class="value" th:text="${login != null ? login : name}">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>显示名称</h3>
+                    <p><span class="value" th:text="${name != null ? name : login}">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>邮箱地址</h3>
+                    <p><span class="value" th:text="${email != null ? email : '未公开'}">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>认证提供商</h3>
+                    <p><span class="value" th:text="${provider}">N/A</span></p>
+                </div>
+                <div class="detail-item">
+                    <h3>认证协议</h3>
+                    <p><span class="value">OAuth2 / OpenID Connect</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="attributes-section">
+            <h2>📊 完整属性数据 (JSON)</h2>
+            <div class="attributes-json" id="attributesJson">
+                <!-- JSON data will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <div class="oauth-explanation">
+            <h2>🔗 OAuth2 / OIDC 技术详解</h2>
+            <ul>
+                <li><strong>授权码流程:</strong> 最安全的OAuth2流程，通过前端重定向实现</li>
+                <li><strong>Access Token:</strong> 用于访问受保护资源的短期令牌</li>
+                <li><strong>ID Token:</strong> OIDC特有的身份令牌，包含用户信息</li>
+                <li><strong>Refresh Token:</strong> 用于获取新的Access Token，无需重新授权</li>
+                <li><strong>Scopes:</strong> 定义应用可以访问的用户信息范围</li>
+                <li><strong>第三方信任:</strong> 用户信任OAuth2提供商管理身份信息</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/oauth2/dashboard" class="back-btn">← 返回控制台</a>
+        </div>
+    </div>
+
+    <script>
+        // Format the attributes as JSON
+        const attributes = /*[[${attributes}]]*/ {};
+        document.getElementById('attributesJson').textContent = JSON.stringify(attributes, null, 2);
+    </script>
+</body>
+</html>

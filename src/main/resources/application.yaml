@@ -1,3 +1,5 @@
 spring:
   application:
     name: LoginDemo
+server:
+  port: 8081

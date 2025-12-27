@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@Order(2)
+@Order(1)
 public class JwtSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

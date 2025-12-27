@@ -9,7 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@Order(3)
+@Order(4)
 public class DefaultSecurityConfig {
 
     @Bean

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT控制台 - 登录认证方案演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            margin: 0;
+            padding: 0;
+            color: #2d3748;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .welcome-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .welcome-card h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        .welcome-card p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+        .token-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .token-info h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .token-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .token-text {
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 10px;
+        }
+        .token-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .detail-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .detail-item h3 {
+            margin: 0 0 8px 0;
+            color: #4a5568;
+            font-size: 0.9em;
+        }
+        .detail-item p {
+            margin: 0;
+            color: #718096;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        .actions {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .actions h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 15px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .action-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+        .api-test-result {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .api-test-result h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .api-result {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        .method-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .method-info h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .method-info ul {
+            padding-left: 20px;
+        }
+        .method-info li {
+            margin-bottom: 10px;
+            color: #718096;
+        }
+        .method-info strong {
+            color: #4a5568;
+        }
+        .copy-btn {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .copy-btn:hover {
+            background: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎫 JWT Token控制台</h1>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1>欢迎使用JWT认证，<span th:text="${username}">用户</span>！</h1>
+            <p>您已成功通过JWT Token完成身份认证</p>
+        </div>
+
+        <div class="token-info">
+            <h2>🔑 JWT Token信息</h2>
+            <div class="token-display">
+                <strong>Token:</strong>
+                <div class="token-text" id="tokenText" th:text="${token}">N/A</div>
+                <button class="copy-btn" onclick="copyToken()">复制Token</button>
+            </div>
+
+            <div class="token-details">
+                <div class="detail-item">
+                    <h3>用户名</h3>
+                    <p th:text="${username}">N/A</p>
+                </div>
+                <div class="detail-item">
+                    <h3>用户角色</h3>
+                    <p th:text="${role}">N/A</p>
+                </div>
+                <div class="detail-item">
+                    <h3>Token状态</h3>
+                    <p style="color: #38a169; font-weight: bold;">✅ 有效</p>
+                </div>
+                <div class="detail-item">
+                    <h3>认证方式</h3>
+                    <p>JWT (无状态)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="api-test-result">
+            <h2>🧪 API测试结果</h2>
+            <div id="apiResult" class="api-result">点击"测试API"按钮进行测试...</div>
+        </div>
+
+        <div class="actions">
+            <h2>🔧 操作面板</h2>
+            <div class="action-buttons">
+                <a href="#" onclick="testApi()" class="action-btn">🧪 测试API访问</a>
+                <a href="#" onclick="testProfile()" class="action-btn">👤 查看个人资料</a>
+                <a href="#" onclick="refreshToken()" class="action-btn">🔄 刷新Token</a>
+                <a href="/jwt/login" class="action-btn" style="background: #e53e3e;">🚪 重新登录</a>
+            </div>
+        </div>
+
+        <div class="method-info">
+            <h2>📚 JWT认证说明</h2>
+            <ul>
+                <li><strong>认证方式：</strong>基于JSON Web Token的无状态认证</li>
+                <li><strong>安全性：</strong>使用HMAC-SHA256算法签名，包含过期时间</li>
+                <li><strong>扩展性：</strong>优秀的水平扩展性，适合分布式系统</li>
+                <li><strong>优点：</strong>无状态设计，跨域友好，客户端可缓存</li>
+                <li><strong>缺点：</strong>无法主动失效，Token较大，签名算法重要</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let jwtToken = '[(${token})]';
+
+        function copyToken() {
+            navigator.clipboard.writeText(jwtToken).then(function() {
+                alert('Token已复制到剪贴板！');
+            });
+        }
+
+        function testApi() {
+            const resultDiv = document.getElementById('apiResult');
+            resultDiv.textContent = '正在测试API...';
+
+            fetch('/jwt/api/test', {
+                headers: {
+                    'Authorization': 'Bearer ' + jwtToken
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+                resultDiv.style.color = '#38a169';
+            })
+            .catch(error => {
+                resultDiv.textContent = 'API测试失败: ' + error.message;
+                resultDiv.style.color = '#e53e3e';
+            });
+        }
+
+        function testProfile() {
+            // 创建一个临时链接来访问profile页面
+            const link = document.createElement('a');
+            link.href = '/jwt/profile';
+            link.style.display = 'none';
+
+            // 添加Authorization header（通过fetch请求）
+            fetch('/jwt/profile', {
+                headers: {
+                    'Authorization': 'Bearer ' + jwtToken
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // 如果成功，重定向到profile页面
+                    window.location.href = '/jwt/profile?token=' + encodeURIComponent(jwtToken);
+                } else {
+                    alert('访问个人资料失败');
+                }
+            })
+            .catch(error => {
+                alert('访问个人资料失败: ' + error.message);
+            });
+        }
+
+        function refreshToken() {
+            alert('Token刷新功能需要后端支持。在实际应用中，Token刷新通常需要额外的refresh token机制。');
+        }
+
+        // 页面加载时自动测试一次API
+        window.onload = function() {
+            testApi();
+        };
+    </script>
+</body>
+</html>

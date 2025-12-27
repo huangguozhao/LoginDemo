@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人资料 - Session认证</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            margin: 0;
+            padding: 0;
+            color: #2d3748;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .profile-card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .info-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .info-item h3 {
+            margin: 0 0 10px 0;
+            color: #4a5568;
+            font-size: 1em;
+        }
+        .info-item p {
+            margin: 5px 0;
+            color: #718096;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #5a67d8;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👤 个人资料</h1>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <h2>用户信息</h2>
+            <div class="profile-info">
+                <div class="info-item">
+                    <h3>用户名</h3>
+                    <p th:text="${username}">N/A</p>
+                </div>
+                <div class="info-item">
+                    <h3>用户权限</h3>
+                    <p th:each="authority : ${authorities}" th:text="${authority.authority}" th:if="${authorityStat.first}">[[${authority.authority}]]</p>
+                    <p th:each="authority : ${authorities}" th:text="${authority.authority}" th:if="${!authorityStat.first}">, [[${authority.authority}]]</p>
+                </div>
+                <div class="info-item">
+                    <h3>认证方式</h3>
+                    <p>Session-Based 认证</p>
+                </div>
+                <div class="info-item">
+                    <h3>账户状态</h3>
+                    <p style="color: #38a169; font-weight: bold;">✅ 已认证</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/session/dashboard" class="back-btn">← 返回控制台</a>
+        </div>
+    </div>
+</body>
+</html>

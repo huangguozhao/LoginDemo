@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session控制台 - 登录认证方案演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            margin: 0;
+            padding: 0;
+            color: #2d3748;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .welcome-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .welcome-card h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        .welcome-card p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+        .session-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .session-info h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .info-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .info-item h3 {
+            margin: 0 0 10px 0;
+            color: #4a5568;
+            font-size: 1em;
+        }
+        .info-item p {
+            margin: 5px 0;
+            color: #718096;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .actions {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .actions h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 15px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .action-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+        .logout-btn {
+            background: #e53e3e;
+        }
+        .logout-btn:hover {
+            background: #c53030;
+        }
+        .method-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .method-info h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .method-info ul {
+            padding-left: 20px;
+        }
+        .method-info li {
+            margin-bottom: 10px;
+            color: #718096;
+        }
+        .method-info strong {
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎛️ Session认证控制台</h1>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1>欢迎回来，<span th:text="${username}">用户</span>！</h1>
+            <p>您已成功通过Session认证登录系统</p>
+        </div>
+
+        <div class="session-info">
+            <h2>📊 会话信息</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3>用户名</h3>
+                    <p th:text="${username}">N/A</p>
+                </div>
+                <div class="info-item">
+                    <h3>用户角色</h3>
+                    <p th:each="role : ${roles}" th:text="${role.authority}" th:if="${roleStat.first}">[[${role.authority}]]</p>
+                    <p th:each="role : ${roles}" th:text="${role.authority}" th:if="${!roleStat.first}">, [[${role.authority}]]</p>
+                </div>
+                <div class="info-item">
+                    <h3>Session ID</h3>
+                    <p th:text="${sessionId}">N/A</p>
+                </div>
+                <div class="info-item">
+                    <h3>创建时间</h3>
+                    <p th:text="${#dates.format(sessionCreationTime, 'yyyy-MM-dd HH:mm:ss')}">N/A</p>
+                </div>
+                <div class="info-item">
+                    <h3>最后访问</h3>
+                    <p th:text="${#dates.format(lastAccessedTime, 'yyyy-MM-dd HH:mm:ss')}">N/A</p>
+                </div>
+                <div class="info-item">
+                    <h3>会话状态</h3>
+                    <p style="color: #38a169; font-weight: bold;">✅ 活跃</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <h2>🔧 操作面板</h2>
+            <div class="action-buttons">
+                <a href="/session/profile" class="action-btn">👤 查看个人资料</a>
+                <a href="/session/settings" class="action-btn">⚙️ 系统设置</a>
+                <a href="/session/logs" class="action-btn">📋 访问日志</a>
+                <form th:action="@{/session/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="action-btn logout-btn" style="border: none; cursor: pointer; width: 100%;">🚪 退出登录</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="method-info">
+            <h2>📚 Session认证说明</h2>
+            <ul>
+                <li><strong>认证方式：</strong>基于HTTP Session的服务器端状态管理</li>
+                <li><strong>安全性：</strong>服务器控制会话生命周期，支持CSRF防护</li>
+                <li><strong>扩展性：</strong>适合单体应用，分布式环境需要Session共享</li>
+                <li><strong>优点：</strong>实现简单，服务器可主动控制会话失效</li>
+                <li><strong>缺点：</strong>服务器存储压力大，不适合分布式系统</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

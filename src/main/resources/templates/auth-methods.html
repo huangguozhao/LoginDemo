@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>认证方法对比 - 登录认证方案演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f7fafc;
+            color: #2d3748;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .comparison-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        tr:hover {
+            background: #f8fafc;
+        }
+        .method-name {
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .advantages, .disadvantages {
+            max-width: 300px;
+        }
+        .advantages {
+            color: #38a169;
+        }
+        .disadvantages {
+            color: #e53e3e;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #5a67d8;
+            color: white;
+            text-decoration: none;
+        }
+        .details-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .details-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .details-section ul {
+            padding-left: 20px;
+        }
+        .details-section li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 认证方法技术对比</h1>
+            <p>深入了解各种认证方案的优缺点</p>
+        </div>
+
+        <div class="comparison-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>认证方法</th>
+                        <th>优点</th>
+                        <th>缺点</th>
+                        <th>适用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="method-name">Session-Based</span></td>
+                        <td class="advantages">
+                            • 安全性高<br>
+                            • 服务器控制会话<br>
+                            • 支持复杂状态管理
+                        </td>
+                        <td class="disadvantages">
+                            • 服务器存储压力<br>
+                            • 扩展性差<br>
+                            • CSRF风险
+                        </td>
+                        <td>企业级应用、复杂权限管理</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name">OAuth2/OIDC</span></td>
+                        <td class="advantages">
+                            • 标准化协议<br>
+                            • 支持第三方授权<br>
+                            • 良好的扩展性
+                        </td>
+                        <td class="disadvantages">
+                            • 实现复杂度高<br>
+                            • 需要外部服务<br>
+                            • 协议复杂
+                        </td>
+                        <td>第三方登录、微服务架构</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name">JWT Token</span></td>
+                        <td class="advantages">
+                            • 无状态设计<br>
+                            • 良好的扩展性<br>
+                            • 支持跨域
+                        </td>
+                        <td class="disadvantages">
+                            • 无法主动失效<br>
+                            • 令牌大小限制<br>
+                            • 安全性依赖算法
+                        </td>
+                        <td>API服务、移动应用、分布式系统</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name">Apache Shiro</span></td>
+                        <td class="advantages">
+                            • 功能丰富<br>
+                            • 易于集成<br>
+                            • 支持多种数据源
+                        </td>
+                        <td class="disadvantages">
+                            • 学习曲线陡峭<br>
+                            • 配置复杂<br>
+                            • 社区活跃度一般
+                        </td>
+                        <td>Java企业应用、复杂安全需求</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="details-section">
+            <h2>📋 技术实现要点</h2>
+            <ul>
+                <li><strong>Session-Based:</strong> 使用Spring Security的默认会话管理，结合表单登录和会话存储</li>
+                <li><strong>OAuth2/OIDC:</strong> 集成Spring Security OAuth2客户端，支持Google、GitHub等第三方登录</li>
+                <li><strong>JWT Token:</strong> 自定义JWT过滤器，生成和验证JSON Web Token</li>
+                <li><strong>Apache Shiro:</strong> 使用Shiro的Realm、Subject等核心组件实现认证和授权</li>
+            </ul>
+        </div>
+
+        <div class="details-section">
+            <h2>🔧 演示说明</h2>
+            <ul>
+                <li>所有认证方法都使用内存用户存储（无需数据库）</li>
+                <li>演示用户：admin/admin123, user/user123</li>
+                <li>每个方法都有独立的登录界面和受保护资源</li>
+                <li>支持注销和会话管理功能</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/" class="back-btn">🏠 返回首页</a>
+        </div>
+    </div>
+</body>
+</html>

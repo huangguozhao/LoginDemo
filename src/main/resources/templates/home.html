@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录认证方案演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .auth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .auth-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            text-decoration: none;
+            color: #333;
+        }
+        .auth-card h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        .auth-card p {
+            color: #718096;
+            margin-bottom: 20px;
+        }
+        .auth-card .method {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 登录认证方案演示</h1>
+            <p>探索不同的身份认证和授权机制</p>
+        </div>
+
+        <div class="auth-grid">
+            <a href="/session/login" class="auth-card">
+                <h3>Session-Based 认证</h3>
+                <p>传统的基于会话的认证方式，使用服务器端会话存储用户状态。</p>
+                <span class="method">Spring Security</span>
+            </a>
+
+            <a href="/oauth2/login" class="auth-card">
+                <h3>OAuth2 / OIDC 认证</h3>
+                <p>现代的开放标准认证协议，支持第三方应用授权。</p>
+                <span class="method">OAuth2 / OpenID Connect</span>
+            </a>
+
+            <a href="/jwt/login" class="auth-card">
+                <h3>JWT Token 认证</h3>
+                <p>无状态的令牌认证，包含用户信息的JSON Web Token。</p>
+                <span class="method">JWT (JSON Web Token)</span>
+            </a>
+
+            <a href="/shiro/login" class="auth-card">
+                <h3>Apache Shiro 认证</h3>
+                <p>功能强大的安全框架，支持多种认证和授权机制。</p>
+                <span class="method">Apache Shiro</span>
+            </a>
+
+            <a href="/auth-methods" class="auth-card">
+                <h3>认证方法对比</h3>
+                <p>查看各种认证方法的优缺点和技术对比。</p>
+                <span class="method">对比分析</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 登录认证方案演示系统 | Spring Boot + 多框架集成</p>
+        </div>
+    </div>
+</body>
+</html>
